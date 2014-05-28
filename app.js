@@ -39,7 +39,10 @@ function extend() {
     });
 }
 
-// Modelos
+//################################################################################################
+// ############################# MODELOS #########################################################
+// ###############################################################################################
+
 var BaseModels = function(data) {
     extend(this, data);
 };
@@ -78,6 +81,7 @@ extend(BaseModels.prototype, {
     }
 });
 
+
 var Post = function(data) {
     data = extend({}, {title: "", content: "", date: Date.now(), views: 0}, data);
     BaseModels.call(this, data);
@@ -98,8 +102,20 @@ extend(User, {
     }
 });
 extend(User.prototype, BaseModels.prototype);
-//--------------------------------------------
 
+//-------------- RADAR --------------------------------------------------------------------------
+
+var Radar = function(data) {
+    data = extend({}, {velMax: "", descripcio: "", longitud: "", latitud:"", date: Date.now() }, data);
+    BaseModels.call(this, data);
+};
+BaseModels.initialize(Radar);
+extend(Radar.prototype, BaseModels.prototype);
+//-----------------------------------------------------------------------------------------------
+
+//################################################################################################
+// ############################# CONTROLADORES ###################################################
+// ###############################################################################################
 
 var postsController = {
 
@@ -213,11 +229,17 @@ var userController = {
     }
 }
 
-// Procesamos el parametro :postid, utilizandon el metodo creado en 
+
+
+
+//################################################################################################
+// ############################# RUTAS ###########################################################
+// ###############################################################################################
+
+// Procesamos el parametro :postid, utilizandon el metodo creado en
 // el controlador. Siempre se realizan antes de las procesar las rutas
 // Ejemplo: https://github.com/visionmedia/express/blob/master/examples/params/app.js
 app.param("postid", postsController.param);
-
 
 app.get('/', function(req, res){
     //res.send('hello world');
@@ -250,11 +272,16 @@ app.use( express.static(app.get('public')) );
 app.listen(3000);
 console.log('Application Started on http://localhost:3000/');
 
+
 /* Datos: los Posts */
 var post = new Post({title: "Prueba", content: "Esto es una prueba"});
 post.save();
 
 var admin = new User({email: "admin@localhost.com", password: "1234"});
 admin.save();
+
+var radar = new Radar({velMax: 50, latitud:10.34234, longitud: 1.34234, descripcio: 'fixe'});
+radar.save();
+
 
 
