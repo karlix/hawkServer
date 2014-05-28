@@ -1,0 +1,13 @@
+extends base
+
+block content
+    section.register.container
+        h1 REGISTRAR
+        form.register-form(action="/register", method="POST")
+            label(for='email') email
+            input.email(type='text', name='email')
+            label(for='password') password
+            input.password(type='text', name='password')
+            input.button(type='submit', value='Registrar')
+        if (message)
+            p(class='alert') #{message}

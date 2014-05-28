@@ -1,0 +1,15 @@
+{
+    "name": "BLOG",
+    "description": "Prueba de Express.js. Blog sin base de datos",
+    "version": "0.0.1",
+    "private": true,
+    "dependencies": {
+        "express": "*",
+        "serve-favicon": "*",
+        "body-parser": "*",
+        "method-override": "*",
+        "cookie-parser": "*",
+        "cookie-session": "*",
+        "jade": "*"
+    }
+}
