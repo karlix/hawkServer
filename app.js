@@ -231,6 +231,84 @@ var userController = {
 
 
 
+var radarController = {
+
+    getRadars: function(req, res){
+        //console.log( req.get('Content-Type') );
+        //console.log( req.accept('application/json') );
+        console.log( {radarList: Radar.getAll()}  );
+        res.json({radarList: Radar.getAll()});
+        //res.send(200);
+        //res.render( "radar-list", {radars: Radar.getAll()} );
+    },
+    getRadarsHtml: function(req, res){
+        console.log( req.get('Content-Type') );
+        res.render( "radar-list", {radars: Radar.getAll()} );
+    },
+    getRadar: function(req, res){
+        if(!req.radarPersisted){
+            res.send(404);
+        }else {
+            res.json( {radar: req.radarPersisted} );
+        }
+    },
+    insert: function(req, res){
+        var radar = req.body;
+        console.log(radar);
+        var newRadar = new Radar( { velMax: radar.velMax || 'buit',
+            descripcio: radar.descripcio || 'buit',
+            longitud: radar.longitud || 0,
+            latitud: radar.latitud || 0}
+        );
+
+        newRadar.save();
+        /*
+        Radar.save({
+            velMax: radar.velMax || 'buit',
+            descripcio: radar.descripcio || 'buit',
+            longitud: radar.longitud || 0,
+            latitud: radar.latitud || 0
+        });
+        */
+        res.send(200);
+    },
+    update: function(req, res){
+        if(!req.radarPersisted){
+            res.send(404);
+        }else {
+            var radar = req.body;
+            try {
+                req.radarPersisted.velMax = radar.velMax;
+                req.radarPersisted.descripcio = radar.descripcio;
+                req.radarPersisted.longitud = radar.longitud;
+                req.radarPersisted.latitud = radar.latitud;
+                req.radarPersisted.update();
+                res.send(200);
+            } catch(exception) {
+                res.send(404);
+            }
+        }
+    },
+    delete : function(req,res){
+
+        if(!req.radarPersisted){
+            res.send(404);
+        }else{
+            try {
+                var radar = req.radarPersisted;
+                radar.delete();
+                res.send(200);
+            } catch (exception) {
+                res.send(404);
+            }
+        }
+    },
+    param: function(req, res, next, id) {
+        req.radarPersisted = Radar.find(id);
+        next();
+    }
+}
+
 
 //################################################################################################
 // ############################# RUTAS ###########################################################
@@ -241,11 +319,15 @@ var userController = {
 // Ejemplo: https://github.com/visionmedia/express/blob/master/examples/params/app.js
 app.param("postid", postsController.param);
 
+
 app.get('/', function(req, res){
     //res.send('hello world');
     res.render('index');
 });
 
+app.get('/radars', radarController.getRadars);
+//app.get('/radars', radarController.getRadarsHtml);
+app.post('/radars', radarController.insert);
 
 app.get('/posts', postsController.index);
 app.get('/posts/news', userController.requireSession, postsController.new);
@@ -283,5 +365,7 @@ admin.save();
 var radar = new Radar({velMax: 50, latitud:10.34234, longitud: 1.34234, descripcio: 'fixe'});
 radar.save();
 
+var radar = new Radar({velMax: 50, latitud:10.34234, longitud: 1.34234, descripcio: 'fixe'});
+radar.save();
 
 

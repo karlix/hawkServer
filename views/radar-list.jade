@@ -17,13 +17,13 @@ block header
 
     
 block content
-    section.posts
-        each post in posts
+    section.radars
+        each radar in radars
             article.post
                 .container
                     h2.post-title
-                        a(href='/posts/#{post.id}')= post.title
-                    p.summary= post.content.slice(0, 150)
+                        a(href='/radars/#{radar.id}')= radar.velMax
+                    p.summary= radar.descripcio
                     aside.metadata
                         | Por
                         a(href='#') &nbsp;Default User
